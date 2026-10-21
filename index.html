@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConcursaAI - Plataforma Inteligente de Estudos</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- SPLASH / LOADING -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>ConcursaAI</h1>
+            <p>Sua aprovação começa aqui</p>
+            <div class="splash-loader">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>ConcursaAI</span>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="user-profile-mini">
+            <div class="user-avatar" id="sidebar-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info-mini">
+                <span class="user-name" id="sidebar-user-name">Estudante</span>
+                <span class="user-level" id="sidebar-user-level">Nível 1</span>
+            </div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item active" data-page="dashboard">
+                <a href="#"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+            </li>
+            <li class="nav-item" data-page="concursos">
+                <a href="#"><i class="fas fa-file-alt"></i><span>Concursos</span></a>
+            </li>
+            <li class="nav-item" data-page="cronograma">
+                <a href="#"><i class="fas fa-calendar-alt"></i><span>Cronograma</span></a>
+            </li>
+            <li class="nav-item" data-page="disciplinas">
+                <a href="#"><i class="fas fa-book-open"></i><span>Disciplinas</span></a>
+            </li>
+            <li class="nav-item" data-page="professores">
+                <a href="#"><i class="fas fa-chalkboard-teacher"></i><span>Professores IA</span></a>
+            </li>
+            <li class="nav-item" data-page="simulados">
+                <a href="#"><i class="fas fa-clipboard-check"></i><span>Simulados</span></a>
+            </li>
+            <li class="nav-item" data-page="revisao">
+                <a href="#"><i class="fas fa-brain"></i><span>Revisão Inteligente</span></a>
+            </li>
+            <li class="nav-item" data-page="desempenho">
+                <a href="#"><i class="fas fa-chart-line"></i><span>Desempenho</span></a>
+            </li>
+            <li class="nav-item" data-page="legislacao">
+                <a href="#"><i class="fas fa-balance-scale"></i><span>Legislação</span></a>
+            </li>
+            <li class="nav-item" data-page="configuracoes">
+                <a href="#"><i class="fas fa-cog"></i><span>Configurações</span></a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div class="study-streak">
+                <i class="fas fa-fire"></i>
+                <span id="streak-count">0</span> dias seguidos
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="main-content">
+        <!-- TOP BAR -->
+        <header class="top-bar">
+            <div class="top-bar-left">
+                <button class="menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="breadcrumb" id="breadcrumb">
+                    <span>Dashboard</span>
+                </div>
+            </div>
+            <div class="top-bar-right">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar conteúdo..." id="global-search">
+                    <div class="search-results" id="search-results"></div>
+                </div>
+                <button class="notif-btn" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i>
+                    <span class="notif-badge" id="notif-badge">3</span>
+                </button>
+                <div class="pomodoro-mini" onclick="openPomodoro()">
+                    <i class="fas fa-clock"></i>
+                    <span id="pomodoro-mini-time">25:00</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- NOTIFICATIONS PANEL -->
+        <div class="notifications-panel" id="notifications-panel">
+            <div class="notif-header">
+                <h3>Notificações</h3>
+                <button onclick="clearNotifications()">Limpar tudo</button>
+            </div>
+            <div class="notif-list" id="notif-list"></div>
+        </div>
+
+        <!-- PAGE: DASHBOARD -->
+        <section class="page active" id="page-dashboard">
+            <div class="page-header">
+                <h1>Olá, <span id="dash-user-name">Estudante</span>! 👋</h1>
+                <p class="page-subtitle">Veja seu progresso e continue evoluindo</p>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-hours">0h</span>
+                        <span class="stat-label">Horas Estudadas</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i> 12%
+                    </div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-questions">0</span>
+                        <span class="stat-label">Questões Resolvidas</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i> 8%
+                    </div>
+                </div>
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-accuracy">0%</span>
+                        <span class="stat-label">Taxa de Acerto</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="fas fa-arrow-up"></i> 5%
+                    </div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-rank">--</span>
+                        <span class="stat-label">Sua Posição</span>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="fas fa-minus"></i> --
+                    </div>
+                </div>
+            </div>
+
+            <!-- DASHBOARD GRID -->
+            <div class="dashboard-grid">
+                <!-- PROGRESSO DO EDITAL -->
+                <div class="card card-large">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-pie"></i> Progresso do Edital</h3>
+                        <select id="edital-select-dash" onchange="updateEditalProgress()">
+                            <option value="">Selecione um concurso</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress-overview" id="progress-overview">
+                            <div class="progress-circle-container">
+                                <div class="progress-circle" id="main-progress-circle">
+                                    <svg viewBox="0 0 120 120">
+                                        <circle cx="60" cy="60" r="54" class="progress-bg"/>
+                                        <circle cx="60" cy="60" r="54" class="progress-fill" id="progress-fill"/>
+                                    </svg>
+                                    <div class="progress-text">
+                                        <span class="progress-value" id="progress-value">0%</span>
+                                        <span class="progress-label">Completo</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-details" id="progress-details">
+                                <p class="empty-state">Selecione um concurso para ver o progresso</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRÓXIMAS ATIVIDADES -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tasks"></i> Próximas Atividades</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list" id="activity-list">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-plus"></i>
+                                <p>Configure seu cronograma para ver as atividades</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESEMPENHO POR DISCIPLINA -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-bar"></i> Desempenho por Disciplina</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="discipline-performance" id="discipline-performance">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>Resolva questões para ver seu desempenho</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REVISÕES PENDENTES -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-redo"></i> Revisões Pendentes</h3>
+                        <span class="badge" id="review-count">0</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="review-list" id="review-list">
+                            <div class="empty-state">
+                                <i class="fas fa-brain"></i>
+                                <p>Nenhuma revisão pendente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COUNTDOWN CONCURSO -->
+            <div class="countdown-banner" id="countdown-banner" style="display:none;">
+                <div class="countdown-info">
+                    <h3 id="countdown-concurso-name">Concurso</h3>
+                    <p>Faltam</p>
+                </div>
+                <div class="countdown-timer" id="countdown-timer">
+                    <div class="countdown-unit">
+                        <span class="countdown-value" id="cd-days">00</span>
+                        <span class="countdown-label">Dias</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="countdown-value" id="cd-hours">00</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="countdown-value" id="cd-minutes">00</span>
+                        <span class="countdown-label">Min</span>
+                    </div>
+                    <div class="countdown-unit">
+                        <span class="countdown-value" id="cd-seconds">00</span>
+                        <span class="countdown-label">Seg</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: CONCURSOS -->
+        <section class="page" id="page-concursos">
+            <div class="page-header">
+                <h1><i class="fas fa-file-alt"></i> Concursos</h1>
+                <p class="page-subtitle">Gerencie seus editais e concursos</p>
+                <button class="btn btn-primary" onclick="openModal('modal-novo-concurso')">
+                    <i class="fas fa-plus"></i> Novo Concurso
+                </button>
+            </div>
+
+            <!-- CONCURSOS ATIVOS -->
+            <div class="section-title">
+                <h2>Meus Concursos</h2>
+            </div>
+            <div class="concursos-grid" id="concursos-grid">
+                <div class="empty-state-large">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Nenhum concurso cadastrado</h3>
+                    <p>Adicione seu primeiro concurso para começar a estudar</p>
+                    <button class="btn btn-primary" onclick="openModal('modal-novo-concurso')">
+                        <i class="fas fa-plus"></i> Adicionar Concurso
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONCURSOS POPULARES -->
+            <div class="section-title">
+                <h2>Concursos Populares</h2>
+            </div>
+            <div class="concursos-populares-grid" id="concursos-populares">
+            </div>
+        </section>
+
+        <!-- PAGE: CRONOGRAMA -->
+        <section class="page" id="page-cronograma">
+            <div class="page-header">
+                <h1><i class="fas fa-calendar-alt"></i> Cronograma de Estudos</h1>
+                <p class="page-subtitle">Organize seu tempo de forma inteligente</p>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="generateSmartSchedule()">
+                        <i class="fas fa-magic"></i> Gerar Cronograma IA
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCHEDULE CONFIG -->
+            <div class="schedule-config card" id="schedule-config">
+                <div class="card-header">
+                    <h3><i class="fas fa-cog"></i> Configuração do Cronograma</h3>
+                </div>
+                <div class="card-body">
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label>Concurso Alvo</label>
+                            <select id="cronograma-concurso">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label>Horas por dia (Seg-Sex)</label>
+                            <input type="number" id="hours-weekday" value="4" min="1" max="16">
+                        </div>
+                        <div class="config-item">
+                            <label>Horas por dia (Sáb-Dom)</label>
+                            <input type="number" id="hours-weekend" value="6" min="0" max="16">
+                        </div>
+                        <div class="config-item">
+                            <label>Método de Estudo</label>
+                            <select id="study-method">
+                                <option value="ciclos">Ciclo de Estudos</option>
+                                <option value="pomodoro">Pomodoro</option>
+                                <option value="blocos">Blocos de Tempo</option>
+                                <option value="intercalado">Intercalado</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label>Prioridade</label>
+                            <select id="study-priority">
+                                <option value="peso">Por Peso no Edital</option>
+                                <option value="dificuldade">Por Dificuldade</option>
+                                <option value="equilibrado">Equilibrado</option>
+                            </select>
+                        </div>
+                        <div class="config-item">
+                            <label>Data da Prova</label>
+                            <input type="date" id="exam-date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALENDAR VIEW -->
+            <div class="calendar-container card">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar"></i> Calendário</h3>
+                    <div class="calendar-nav">
+                        <button onclick="prevMonth()"><i class="fas fa-chevron-left"></i></button>
+                        <span id="calendar-month-year">Janeiro 2025</span>
+                        <button onclick="nextMonth()"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="active" onclick="setCalendarView('month')">Mês</button>
+                        <button onclick="setCalendarView('week')">Semana</button>
+                        <button onclick="setCalendarView('day')">Dia</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="calendar-grid" id="calendar-grid">
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEEKLY SCHEDULE -->
+            <div class="weekly-schedule card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list"></i> Plano Semanal</h3>
+                </div>
+                <div class="card-body">
+                    <div class="week-grid" id="week-grid">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: DISCIPLINAS -->
+        <section class="page" id="page-disciplinas">
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> Disciplinas</h1>
+                <p class="page-subtitle">Explore o conteúdo de cada disciplina</p>
+            </div>
+
+            <div class="disciplinas-filter">
+                <div class="filter-group">
+                    <select id="filter-concurso-disc">
+                        <option value="">Todos os concursos</option>
+                    </select>
+                    <select id="filter-area">
+                        <option value="">Todas as áreas</option>
+                        <option value="basica">Conhecimentos Básicos</option>
+                        <option value="especifica">Conhecimentos Específicos</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="disciplinas-grid" id="disciplinas-grid">
+            </div>
+        </section>
+
+        <!-- PAGE: PROFESSORES IA -->
+        <section class="page" id="page-professores">
+            <div class="page-header">
+                <h1><i class="fas fa-chalkboard-teacher"></i> Professores Virtuais IA</h1>
+                <p class="page-subtitle">Especialistas em cada disciplina prontos para ajudar</p>
+            </div>
+
+            <div class="professores-grid" id="professores-grid">
+            </div>
+
+            <!-- CHAT COM PROFESSOR -->
+            <div class="professor-chat-container" id="professor-chat" style="display:none;">
+                <div class="chat-header" id="chat-header">
+                    <button class="btn-back" onclick="closeProfessorChat()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="chat-professor-info">
+                        <div class="chat-avatar" id="chat-avatar"></div>
+                        <div>
+                            <h3 id="chat-professor-name">Professor</h3>
+                            <span id="chat-professor-subject">Disciplina</span>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <button onclick="openProfessorNotes()" title="Anotações">
+                            <i class="fas fa-sticky-note"></i>
+                        </button>
+                        <button onclick="requestExplanation()" title="Pedir Explicação">
+                            <i class="fas fa-lightbulb"></i>
+                        </button>
+                        <button onclick="requestExercise()" title="Pedir Exercício">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                </div>
+                <div class="chat-quick-actions" id="chat-quick-actions">
+                    <button onclick="sendQuickAction('resumo')">📝 Resumo do tema</button>
+                    <button onclick="sendQuickAction('exercicio')">✏️ Exercício prático</button>
+                    <button onclick="sendQuickAction('mapa')">🗺️ Mapa mental</button>
+                    <button onclick="sendQuickAction('dica')">💡 Dica de prova</button>
+                    <button onclick="sendQuickAction('jurisprudencia')">⚖️ Jurisprudência</button>
+                </div>
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <button class="attach-btn" title="Anexar">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <textarea id="chat-input" placeholder="Digite sua dúvida..." rows="1"></textarea>
+                        <button class="send-btn" onclick="sendMessage()" id="send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: SIMULADOS -->
+        <section class="page" id="page-simulados">
+            <div class="page-header">
+                <h1><i class="fas fa-clipboard-check"></i> Simulados e Questões</h1>
+                <p class="page-subtitle">Pratique com questões de concursos anteriores</p>
+            </div>
+
+            <div class="simulados-options">
+                <div class="simulado-card" onclick="startSimulado('personalizado')">
+                    <div class="simulado-icon"><i class="fas fa-sliders-h"></i></div>
+                    <h3>Simulado Personalizado</h3>
+                    <p>Monte seu simulado escolhendo disciplinas e quantidade</p>
+                </div>
+                <div class="simulado-card" onclick="startSimulado('completo')">
+                    <div class="simulado-icon"><i class="fas fa-file-alt"></i></div>
+                    <h3>Simulado Completo</h3>
+                    <p>Simule a prova completa do seu concurso</p>
+                </div>
+                <div class="simulado-card" onclick="startSimulado('rapido')">
+                    <div class="simulado-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Questões Rápidas</h3>
+                    <p>10 questões aleatórias para treino rápido</p>
+                </div>
+                <div class="simulado-card" onclick="startSimulado('erros')">
+                    <div class="simulado-icon"><i class="fas fa-redo"></i></div>
+                    <h3>Refazer Erros</h3>
+                    <p>Pratique novamente as questões que você errou</p>
+                </div>
+            </div>
+
+            <!-- SIMULADO EM ANDAMENTO -->
+            <div class="simulado-container" id="simulado-container" style="display:none;">
+                <div class="simulado-header">
+                    <div class="simulado-info">
+                        <span id="simulado-title">Simulado</span>
+                        <span id="simulado-progress">Questão 1 de 10</span>
+                    </div>
+                    <div class="simulado-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="simulado-timer">00:00</span>
+                    </div>
+                    <button class="btn btn-danger" onclick="finishSimulado()">Finalizar</button>
+                </div>
+
+                <div class="question-container" id="question-container">
+                </div>
+
+                <div class="simulado-nav">
+                    <button class="btn btn-outline" onclick="prevQuestion()" id="btn-prev-q">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </button>
+                    <div class="question-map" id="question-map">
+                    </div>
+                    <button class="btn btn-primary" onclick="nextQuestion()" id="btn-next-q">
+                        Próxima <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESULTADO SIMULADO -->
+            <div class="simulado-result" id="simulado-result" style="display:none;">
+            </div>
+
+            <!-- HISTÓRICO -->
+            <div class="section-title">
+                <h2>Histórico de Simulados</h2>
+            </div>
+            <div class="simulado-history" id="simulado-history">
+                <div class="empty-state">
+                    <i class="fas fa-clipboard-check"></i>
+                    <p>Nenhum simulado realizado ainda</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: REVISÃO INTELIGENTE -->
+        <section class="page" id="page-revisao">
+            <div class="page-header">
+                <h1><i class="fas fa-brain"></i> Revisão Inteligente</h1>
+                <p class="page-subtitle">Sistema de repetição espaçada para fixação</p>
+            </div>
+
+            <div class="revision-stats">
+                <div class="rev-stat">
+                    <span class="rev-stat-value" id="rev-pending">0</span>
+                    <span class="rev-stat-label">Pendentes Hoje</span>
+                </div>
+                <div class="rev-stat">
+                    <span class="rev-stat-value" id="rev-completed">0</span>
+                    <span class="rev-stat-label">Concluídas</span>
+                </div>
+                <div class="rev-stat">
+                    <span class="rev-stat-value" id="rev-total">0</span>
+                    <span class="rev-stat-label">Total de Cards</span>
+                </div>
+            </div>
+
+            <!-- FLASHCARD CONTAINER -->
+            <div class="flashcard-container" id="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-front" id="flashcard-front">
+                        <div class="flashcard-category" id="fc-category">Categoria</div>
+                        <p id="fc-question">Clique em "Iniciar Revisão" para começar</p>
+                    </div>
+                    <div class="flashcard-back" id="flashcard-back">
+                        <p id="fc-answer">Resposta aparecerá aqui</p>
+                    </div>
+                </div>
+                <div class="flashcard-actions" id="flashcard-actions" style="display:none;">
+                    <button class="fc-btn fc-again" onclick="rateCard(0)">
+                        <i class="fas fa-times"></i> Errei
+                    </button>
+                    <button class="fc-btn fc-hard" onclick="rateCard(1)">
+                        <i class="fas fa-frown"></i> Difícil
+                    </button>
+                    <button class="fc-btn fc-good" onclick="rateCard(2)">
+                        <i class="fas fa-smile"></i> Bom
+                    </button>
+                    <button class="fc-btn fc-easy" onclick="rateCard(3)">
+                        <i class="fas fa-laugh-beam"></i> Fácil
+                    </button>
+                </div>
+            </div>
+
+            <div class="revision-controls">
+                <button class="btn btn-primary" onclick="startRevision()">
+                    <i class="fas fa-play"></i> Iniciar Revisão
+                </button>
+                <button class="btn btn-outline" onclick="openModal('modal-add-card')">
+                    <i class="fas fa-plus"></i> Adicionar Card
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE: DESEMPENHO -->
+        <section class="page" id="page-desempenho">
+            <div class="page-header">
+                <h1><i class="fas fa-chart-line"></i> Desempenho</h1>
+                <p class="page-subtitle">Análise detalhada do seu progresso</p>
+            </div>
+
+            <div class="performance-grid">
+                <div class="card card-large">
+                    <div class="card-header">
+                        <h3>Evolução Semanal</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" id="weekly-chart">
+                            <canvas id="canvas-weekly"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Horas por Disciplina</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="hours-breakdown" id="hours-breakdown">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Pontos Fracos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="weak-points" id="weak-points">
+                            <div class="empty-state">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Resolva mais questões para identificar pontos fracos</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Metas</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="goals-list" id="goals-list">
+                        </div>
+                        <button class="btn btn-sm btn-outline" onclick="addGoal()">
+                            <i class="fas fa-plus"></i> Nova Meta
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: LEGISLAÇÃO -->
+        <section class="page" id="page-legislacao">
+            <div class="page-header">
+                <h1><i class="fas fa-balance-scale"></i> Legislação</h1>
+                <p class="page-subtitle">Acesse leis, súmulas e jurisprudências</p>
+            </div>
+
+            <div class="legislation-search">
+                <input type="text" placeholder="Buscar legislação..." id="leg-search">
+                <select id="leg-type">
+                    <option value="">Tipo</option>
+                    <option value="cf">Constituição Federal</option>
+                    <option value="lei">Lei Ordinária</option>
+                    <option value="lc">Lei Complementar</option>
+                    <option value="sumula">Súmula</option>
+                    <option value="decreto">Decreto</option>
+                </select>
+            </div>
+
+            <div class="legislation-list" id="legislation-list">
+            </div>
+        </section>
+
+        <!-- PAGE: CONFIGURAÇÕES -->
+        <section class="page" id="page-configuracoes">
+            <div class="page-header">
+                <h1><i class="fas fa-cog"></i> Configurações</h1>
+                <p class="page-subtitle">Personalize sua experiência de estudo</p>
+            </div>
+
+            <div class="settings-grid">
+                <div class="card">
+                    <div class="card-header"><h3>Perfil</h3></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Nome</label>
+                            <input type="text" id="config-name" placeholder="Seu nome">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="config-email" placeholder="seu@email.com">
+                        </div>
+                        <button class="btn btn-primary" onclick="saveProfile()">Salvar Perfil</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Aparência</h3></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Tema</label>
+                            <div class="theme-options">
+                                <button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')">
+                                    <i class="fas fa-moon"></i> Escuro
+                                </button>
+                                <button class="theme-btn" data-theme="light" onclick="setTheme('light')">
+                                    <i class="fas fa-sun"></i> Claro
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cor Primária</label>
+                            <div class="color-options">
+                                <button class="color-btn active" style="background:#6C5CE7" onclick="setColor('#6C5CE7')"></button>
+                                <button class="color-btn" style="background:#00B894" onclick="setColor('#00B894')"></button>
+                                <button class="color-btn" style="background:#0984E3" onclick="setColor('#0984E3')"></button>
+                                <button class="color-btn" style="background:#E17055" onclick="setColor('#E17055')"></button>
+                                <button class="color-btn" style="background:#FDCB6E" onclick="setColor('#FDCB6E')"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Notificações</h3></div>
+                    <div class="card-body">
+                        <div class="toggle-group">
+                            <label>Lembrete de Estudo</label>
+                            <input type="checkbox" id="notif-study" checked>
+                        </div>
+                        <div class="toggle-group">
+                            <label>Revisões Pendentes</label>
+                            <input type="checkbox" id="notif-review" checked>
+                        </div>
+                        <div class="toggle-group">
+                            <label>Metas Diárias</label>
+                            <input type="checkbox" id="notif-goals" checked>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>Dados</h3></div>
+                    <div class="card-body">
+                        <button class="btn btn-outline" onclick="exportData()">
+                            <i class="fas fa-download"></i> Exportar Dados
+                        </button>
+                        <button class="btn btn-outline" onclick="importData()">
+                            <i class="fas fa-upload"></i> Importar Dados
+                        </button>
+                        <button class="btn btn-danger" onclick="resetData()">
+                            <i class="fas fa-trash"></i> Limpar Dados
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h3>🔑 API OpenAI (Professores IA)</h3></div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Chave da API OpenAI</label>
+                            <div class="api-key-input">
+                                <input type="password" id="config-api-key" placeholder="sk-...">
+                                <button onclick="toggleApiKeyVisibility()" class="btn btn-sm btn-outline">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small>Necessária para os professores IA funcionarem com respostas reais. Sem ela, serão usadas respostas simuladas.</small>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveApiKey()">Salvar Chave</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL: NOVO CONCURSO -->
+    <div class="modal-overlay" id="modal-novo-concurso">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Novo Concurso</h2>
+                <button class="modal-close" onclick="closeModal('modal-novo-concurso')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nome do Concurso / Órgão</label>
+                    <input type="text" id="nc-name" placeholder="Ex: TRF 3ª Região - Analista Judiciário">
+                </div>
+                <div class="form-group">
+                    <label>Banca</label>
+                    <select id="nc-banca">
+                        <option value="">Selecione a banca</option>
+                        <option value="cespe">CESPE/CEBRASPE</option>
+                        <option value="fcc">FCC</option>
+                        <option value="fgv">FGV</option>
+                        <option value="vunesp">VUNESP</option>
+                        <option value="cesgranrio">CESGRANRIO</option>
+                        <option value="ibfc">IBFC</option>
+                        <option value="quadrix">QUADRIX</option>
+                        <option value="outras">Outras</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cargo</label>
+                    <input type="text" id="nc-cargo" placeholder="Ex: Analista Judiciário - Área Administrativa">
+                </div>
+                <div class="form-group">
+                    <label>Data Prevista da Prova</label>
+                    <input type="date" id="nc-date">
+                </div>
+                <div class="form-group">
+                    <label>Escolaridade</label>
+                    <select id="nc-escolaridade">
+                        <option value="medio">Nível Médio</option>
+                        <option value="superior" selected>Nível Superior</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Remuneração</label>
+                    <input type="text" id="nc-salario" placeholder="Ex: R$ 12.455,30">
+                </div>
+
+                <div class="section-title">
+                    <h3>Disciplinas do Edital</h3>
+                    <button class="btn btn-sm btn-outline" onclick="addEditalDiscipline()">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+
+                <div id="edital-disciplines-list" class="edital-disciplines">
+                    <!-- Dynamic content -->
+                </div>
+
+                <div class="template-buttons">
+                    <p>Ou use um template:</p>
+                    <button class="btn btn-sm btn-outline" onclick="loadTemplate('tribunal')">
+                        Tribunal (Analista)
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="loadTemplate('policia')">
+                        Polícia Federal
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="loadTemplate('receita')">
+                        Receita Federal
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="loadTemplate('inss')">
+                        INSS
+                    </button>
+                    <button class="btn btn-sm btn-outline" onclick="loadTemplate('banco')">
+                        Banco do Brasil/CEF
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-novo-concurso')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveConcurso()">
+                    <i class="fas fa-save"></i> Salvar Concurso
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: DISCIPLINA DETAIL -->
+    <div class="modal-overlay" id="modal-disciplina">
+        <div class="modal modal-large">
+            <div class="modal-header">
+                <h2 id="disc-modal-title">Disciplina</h2>
+                <button class="modal-close" onclick="closeModal('modal-disciplina')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="disc-modal-body">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SIMULADO CONFIG -->
+    <div class="modal-overlay" id="modal-simulado-config">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Configurar Simulado</h2>
+                <button class="modal-close" onclick="closeModal('modal-simulado-config')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Concurso</label>
+                    <select id="sim-concurso">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Disciplinas</label>
+                    <div id="sim-disciplines" class="checkbox-group"></div>
+                </div>
+                <div class="form-group">
+                    <label>Quantidade de Questões</label>
+                    <input type="number" id="sim-quantity" value="20" min="5" max="100">
+                </div>
+                <div class="form-group">
+                    <label>Tempo Limite (minutos)</label>
+                    <input type="number" id="sim-time" value="60" min="10" max="360">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-simulado-config')">Cancelar</button>
+                <button class="btn btn-primary" onclick="startConfiguredSimulado()">
+                    <i class="fas fa-play"></i> Iniciar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD FLASHCARD -->
+    <div class="modal-overlay" id="modal-add-card">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Novo Flashcard</h2>
+                <button class="modal-close" onclick="closeModal('modal-add-card')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Disciplina</label>
+                    <select id="card-discipline">
+                        <option value="">Selecione</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pergunta (Frente)</label>
+                    <textarea id="card-question" rows="3" placeholder="Digite a pergunta..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Resposta (Verso)</label>
+                    <textarea id="card-answer" rows="5" placeholder="Digite a resposta..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('modal-add-card')">Cancelar</button>
+                <button class="btn btn-primary" onclick="saveFlashcard()">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POMODORO MODAL -->
+    <div class="modal-overlay" id="modal-pomodoro">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2><i class="fas fa-clock"></i> Pomodoro Timer</h2>
+                <button class="modal-close" onclick="closeModal('modal-pomodoro')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body pomodoro-body">
+                <div class="pomodoro-display">
+                    <div class="pomodoro-circle">
+                        <svg viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="54" class="pomo-bg"/>
+                            <circle cx="60" cy="60" r="54" class="pomo-fill" id="pomo-fill"/>
+                        </svg>
+                        <div class="pomodoro-time" id="pomodoro-time">25:00</div>
+                    </div>
+                </div>
+                <div class="pomodoro-label" id="pomodoro-label">Foco</div>
+                <div class="pomodoro-controls">
+                    <button class="btn btn-primary" onclick="togglePomodoro()" id="pomo-toggle-btn">
+                        <i class="fas fa-play"></i> Iniciar
+                    </button>
+                    <button class="btn btn-outline" onclick="resetPomodoro()">
+                        <i class="fas fa-redo"></i> Resetar
+                    </button>
+                </div>
+                <div class="pomodoro-settings">
+                    <div class="pomo-setting">
+                        <label>Foco (min)</label>
+                        <input type="number" id="pomo-focus" value="25" min="1" max="60">
+                    </div>
+                    <div class="pomo-setting">
+                        <label>Pausa (min)</label>
+                        <input type="number" id="pomo-break" value="5" min="1" max="30">
+                    </div>
+                    <div class="pomo-setting">
+                        <label>Pausa Longa (min)</label>
+                        <input type="number" id="pomo-long-break" value="15" min="5" max="60">
+                    </div>
+                </div>
+                <div class="pomodoro-sessions">
+                    <span>Sessões: <strong id="pomo-sessions">0</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- SCRIPTS -->
+    <script src="js/storage.js"></script>
+    <script src="js/agents.js"></script>
+    <script src="js/cronograma.js"></script>
+    <script src="js/edital.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
